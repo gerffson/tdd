@@ -1,15 +1,26 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.Conta;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class CaixaService {
 
-    public Double getBalance() {
-        return 10.0;
+    public CaixaService(ContaService contaService)
+    {
+        this.contaService = contaService;
+    }
+    ContaService contaService;
+
+    public double getBalance(int conta) {
+        return contaService.saldo(conta);
     }
 
-    public String sacarValor(Conta conta, double valorSaque) {
-        //conta.setSaldo(conta.getSaldo() - valorSaque);
-        return "Saque no valor de: " + valorSaque + ". Saldo: " + conta.getSaldo();
+    public String sacarValor(int conta, double valorSaque) {
+
+        double saque = contaService.sacar(conta, valorSaque);
+
+        return "Saque no valor de: " + saque + ". Saldo: " + getBalance(conta);
     }
 }

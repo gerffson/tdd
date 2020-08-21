@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.example.demo.entity.Conta;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 /**
  * Exibir saldo ("Saldo: X")
@@ -18,20 +19,29 @@ public class CaixaEletronicoTest {
 
     @Test
     public void shouldShowBalance() {
-        CaixaService caixaService = new CaixaService();
-        Double balance = caixaService.getBalance();
+        ContaService contaService= Mockito.mock(ContaService.class);
+        CaixaService caixaService = new CaixaService(contaService);
+
+        Mockito.when(contaService.saldo(1)).thenReturn(10.0);
+
+        Double balance = caixaService.getBalance(1);
         assertEquals(10.0, balance);
     }
 
     @Test
     public void deveSacarValorSucesso() {
-        CaixaService caixaService = new CaixaService();
+        ContaService contaService= Mockito.mock(ContaService.class);
+        CaixaService caixaService = new CaixaService(contaService);
         double valorSaque = 2;
         double saldo = 5;
 
-        Conta conta = new Conta(1, saldo);
-        String msg = caixaService.sacarValor(conta, valorSaque);
+        Mockito.when(contaService.sacar(1, valorSaque)).thenReturn(valorSaque);
+        Mockito.when(contaService.saldo(1)).thenReturn(saldo);
+
+        String msg = caixaService.sacarValor(1, valorSaque);
         assertEquals("Saque no valor de: " + valorSaque + ". Saldo: " + saldo, msg);
     }
+
+
 
 }
