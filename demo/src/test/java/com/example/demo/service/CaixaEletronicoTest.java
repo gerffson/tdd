@@ -2,9 +2,8 @@ package com.example.demo.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.sun.media.sound.SoftMainMixer;
+import com.example.demo.entity.Conta;
 import org.junit.jupiter.api.Test;
-import org.springframework.test.util.AssertionErrors;
 
 /**
  * Exibir saldo ("Saldo: X")
@@ -18,11 +17,21 @@ public class CaixaEletronicoTest {
 
 
     @Test
-    public void shouldShowBalance(){
+    public void shouldShowBalance() {
         CaixaService caixaService = new CaixaService();
         Double balance = caixaService.getBalance();
         assertEquals(10.0, balance);
     }
 
+    @Test
+    public void deveSacarValorSucesso() {
+        CaixaService caixaService = new CaixaService();
+        double valorSaque = 2;
+        double saldo = 5;
+
+        Conta conta = new Conta(1, saldo);
+        String msg = caixaService.sacarValor(conta, valorSaque);
+        assertEquals("Saque no valor de: " + valorSaque + ". Saldo: " + saldo, msg);
+    }
 
 }
